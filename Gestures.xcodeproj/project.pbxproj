@@ -8,12 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		2ABD69C122C4AED4003FC977 /* Gestures.h in Headers */ = {isa = PBXBuildFile; fileRef = 2ABD69BF22C4AED4003FC977 /* Gestures.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2ABD69C822C4AF22003FC977 /* Gestures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ABD69C722C4AF22003FC977 /* Gestures.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		2ABD69BC22C4AED4003FC977 /* Gestures.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Gestures.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2ABD69BF22C4AED4003FC977 /* Gestures.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Gestures.h; sourceTree = "<group>"; };
 		2ABD69C022C4AED4003FC977 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2ABD69C722C4AF22003FC977 /* Gestures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gestures.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -46,6 +48,7 @@
 		2ABD69BE22C4AED4003FC977 /* Gestures */ = {
 			isa = PBXGroup;
 			children = (
+				2ABD69C722C4AF22003FC977 /* Gestures.swift */,
 				2ABD69BF22C4AED4003FC977 /* Gestures.h */,
 				2ABD69C022C4AED4003FC977 /* Info.plist */,
 			);
@@ -95,6 +98,7 @@
 				TargetAttributes = {
 					2ABD69BB22C4AED4003FC977 = {
 						CreatedOnToolsVersion = 11.0;
+						LastSwiftMigration = 1100;
 					};
 				};
 			};
@@ -131,6 +135,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2ABD69C822C4AF22003FC977 /* Gestures.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -260,6 +265,7 @@
 		2ABD69C522C4AED4003FC977 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 5W3SMC6NDZ;
@@ -276,6 +282,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = vysotskiyserhiy.Gestures;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -284,6 +291,7 @@
 		2ABD69C622C4AED4003FC977 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 5W3SMC6NDZ;
