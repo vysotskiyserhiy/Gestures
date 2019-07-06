@@ -96,7 +96,7 @@ public extension UIView {
 // MARK: - Gesture
 extension UIView {
     public enum Gesture {
-        case tap(numberOfTapsRequired: Int = 0, numberOfTouchesRequired: Int = 1)
+        case tap(numberOfTapsRequired: Int = 1, numberOfTouchesRequired: Int = 1)
         case pan(minimumNumberOfTouches: Int = 1, maximumNumberOfTouches: Int = .max)
         case pinch(scale: CGFloat = 1)
         case longPress(minimumPressDuration: TimeInterval = 0.5, allowableMovement: CGFloat = 10, numberOfTapsRequired: Int = 0, numberOfTouchesRequired: Int = 1)
