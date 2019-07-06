@@ -12,13 +12,13 @@ let debug = false
 
 // MARK: - Gestures
 extension UIView {
-    private static var _handlers = [String: [Gesture: (UIGestureRecognizer) -> ()]]()
-    private static var _removeHandlers = [String: [Gesture: () -> ()]]()
+    private static var _handlers = [String: [String: (UIGestureRecognizer) -> ()]]()
+    private static var _removeHandlers = [String: [String: () -> ()]]()
     fileprivate var hashString: String { hashValue.description }
     
     @objc private func _callHandler(_ sender: UIGestureRecognizer) {
         let gesture = Gesture(gesture: sender)
-        UIView._handlers[hashString]?[gesture]?(sender)
+        UIView._handlers[hashString]?[gesture.key]?(sender)
         
         if debug {
             print("Calling handler on view \(hashString), for gesture \(gesture)")
@@ -43,7 +43,7 @@ public extension UIView {
     ///
     /// - Returns: UIGesureRecognizer that handles current gesture
     @discardableResult
-    func recognize(_ gesture: Gesture, target: Any, action: Selector, setup: (UIGestureRecognizer) -> () = { _ in }) -> UIGestureRecognizer? {
+    func recognize(_ gesture: Gesture, target: Any, action: Selector) -> UIGestureRecognizer? {
         if debug {
             print("Adding handler on view \(hashString), for gesture \(gesture)")
         }
@@ -52,12 +52,11 @@ public extension UIView {
             return nil
         }
         
-        setup(recognizer)
         recognizer.addTarget(target, action: action)
         addGestureRecognizer(recognizer)
         isUserInteractionEnabled = true
         
-        UIView._removeHandlers[hashString, default: [:]][gesture] = { [weak recognizer] in
+        UIView._removeHandlers[hashString, default: [:]][gesture.key] = { [weak recognizer] in
             recognizer?.removeTarget(target, action: action)
         }
         
@@ -68,7 +67,7 @@ public extension UIView {
     ///
     /// - Returns: UIGesureRecognizer that handles current gesture
     @discardableResult
-    func recognize(_ gesture: Gesture, setup: (UIGestureRecognizer) -> () = { _ in }, handler: @escaping (UIGestureRecognizer) -> ()) -> UIGestureRecognizer? {
+    func recognize(_ gesture: Gesture, handler: @escaping (UIGestureRecognizer) -> ()) -> UIGestureRecognizer? {
         if debug {
             print("Adding handler on view \(hashString), for gesture \(gesture)")
         }
@@ -77,13 +76,12 @@ public extension UIView {
             return nil
         }
         
-        setup(recognizer)
         recognizer.addTarget(self, action: #selector(_callHandler(_:)))
         addGestureRecognizer(recognizer)
         isUserInteractionEnabled = true
         
-        UIView._handlers[hashString, default: [:]][gesture] = handler
-        UIView._removeHandlers[hashString, default: [:]][gesture] = { [weak recognizer, weak self] in
+        UIView._handlers[hashString, default: [:]][gesture.key] = handler
+        UIView._removeHandlers[hashString, default: [:]][gesture.key] = { [weak recognizer, weak self] in
             if debug {
                 print("Removing handler on view \(self?.hashString ?? "nil"), for gesture \(gesture)")
             }
@@ -98,31 +96,41 @@ public extension UIView {
 // MARK: - Gesture
 extension UIView {
     public enum Gesture {
-        case tap
-        case pan
-        case pinch
-        case longPress
+        case tap(numberOfTapsRequired: Int = 0, numberOfTouchesRequired: Int = 1)
+        case pan(minimumNumberOfTouches: Int = 1, maximumNumberOfTouches: Int = .max)
+        case pinch(scale: CGFloat = 1)
+        case longPress(minimumPressDuration: TimeInterval = 0.5, allowableMovement: CGFloat = 10, numberOfTapsRequired: Int = 0, numberOfTouchesRequired: Int = 1)
         case rotation
-        case swipe
-        case screenEdgePan
+        case swipe(UISwipeGestureRecognizer.Direction)
+        case screenEdgePan(UIRectEdge)
         case none
+        
+        var key: String {
+            String(describing: self)
+        }
         
         fileprivate init(gesture: UIGestureRecognizer) {
             switch gesture {
             case is UITapGestureRecognizer:
-                self = .tap
+                let tap = gesture as! UITapGestureRecognizer
+                self = .tap(numberOfTapsRequired: tap.numberOfTapsRequired, numberOfTouchesRequired: tap.numberOfTouchesRequired)
             case is UIPanGestureRecognizer:
-                self = .pan
+                let pan = gesture as! UIPanGestureRecognizer
+                self = .pan(minimumNumberOfTouches: pan.minimumNumberOfTouches, maximumNumberOfTouches: pan.maximumNumberOfTouches)
             case is UIPinchGestureRecognizer:
-                self = .pinch
+                let pinch = gesture as! UIPinchGestureRecognizer
+                self = .pinch(scale: pinch.scale)
             case is UILongPressGestureRecognizer:
-                self = .longPress
+                let longPress = gesture as! UILongPressGestureRecognizer
+                self = .longPress(minimumPressDuration: longPress.minimumPressDuration, allowableMovement: longPress.allowableMovement, numberOfTapsRequired: longPress.numberOfTapsRequired, numberOfTouchesRequired: longPress.numberOfTouchesRequired)
             case is UIRotationGestureRecognizer:
                 self = .rotation
             case is UISwipeGestureRecognizer:
-                self = .swipe
+                let swipe = gesture as! UISwipeGestureRecognizer
+                self = .swipe(swipe.direction)
             case is UIScreenEdgePanGestureRecognizer:
-                self = .screenEdgePan
+                let screenEdgePan = gesture as! UIScreenEdgePanGestureRecognizer
+                self = .screenEdgePan(screenEdgePan.edges)
             default:
                 self = .none
             }
@@ -130,20 +138,37 @@ extension UIView {
         
         fileprivate var gesture: UIGestureRecognizer? {
             switch self {
-            case .tap:
+            case let .tap(numberOfTapsRequired, numberOfTouchesRequired):
+                let tap = UITapGestureRecognizer()
+                tap.numberOfTapsRequired = numberOfTapsRequired
+                tap.numberOfTouchesRequired = numberOfTouchesRequired
                 return UITapGestureRecognizer()
-            case .pan:
-                return UIPanGestureRecognizer()
-            case .pinch:
-                return UIPinchGestureRecognizer()
-            case .longPress:
-                return UILongPressGestureRecognizer()
+            case let .pan(minimumNumberOfTouches, maximumNumberOfTouches):
+                let pan = UIPanGestureRecognizer()
+                pan.minimumNumberOfTouches = minimumNumberOfTouches
+                pan.maximumNumberOfTouches = maximumNumberOfTouches
+                return pan
+            case let .pinch(scale):
+                let pinch = UIPinchGestureRecognizer()
+                pinch.scale = scale
+                return pinch
+            case let .longPress(minimumPressDuration, allowableMovement, numberOfTapsRequired, numberOfTouchesRequired):
+                let press = UILongPressGestureRecognizer()
+                press.minimumPressDuration = minimumPressDuration
+                press.allowableMovement = allowableMovement
+                press.numberOfTapsRequired = numberOfTapsRequired
+                press.numberOfTouchesRequired = numberOfTouchesRequired
+                return press
             case .rotation:
                 return UIRotationGestureRecognizer()
-            case .swipe:
-                return UISwipeGestureRecognizer()
-            case .screenEdgePan:
-                return UIScreenEdgePanGestureRecognizer()
+            case let .swipe(direction):
+                let swipe = UISwipeGestureRecognizer()
+                swipe.direction = direction
+                return swipe
+            case let .screenEdgePan(edges):
+                let pan = UIScreenEdgePanGestureRecognizer()
+                pan.edges = edges
+                return pan
             case .none:
                 return nil
             }

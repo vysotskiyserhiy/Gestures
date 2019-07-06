@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'Gestures'
-  s.version          = '0.0.1'
+  s.version          = '0.0.2'
   s.summary          = 'UIView Gestures'
   s.homepage         = 'https://github.com/vysotskiyserhiy/Gestures'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
