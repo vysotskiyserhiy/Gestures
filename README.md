@@ -11,14 +11,19 @@
 let view = UIView()
 
 view.recognize(.tap) { _ in
-// handle tap
+    // handle tap
 }
 
-// if you need any additional setup
+view.recognize(.swipe(.left)) { (_) in
+    // handle left swipe
+}
 
-view.recognize(.pan) { gesture in
-let pan = gesture as! UIPanGestureRecognizer
-// ...
+// Or use target/selector
+view.recognize(.edgeScreenPan(.left), target: self, action: #selector(handleEdgePan))
+
+// If you need any additional setup...
+view.recognize(.panSetup(minimumNumberOfTouches: 1, maximumNumberOfTouches: 4)) { (_) in
+    // ...
 }
 
 ```

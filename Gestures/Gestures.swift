@@ -14,7 +14,7 @@ let debug = false
 extension UIView {
     private static var _handlers = [String: [String: (UIGestureRecognizer) -> ()]]()
     private static var _removeHandlers = [String: [String: () -> ()]]()
-    fileprivate var hashString: String { hashValue.description }
+    fileprivate var hashString: String { return hashValue.description }
     
     @objc private func _callHandler(_ sender: UIGestureRecognizer) {
         let gesture = Gesture(gesture: sender)
@@ -101,20 +101,22 @@ extension UIView {
         case pinch
         case longPress
         case rotation
-        case swipe
-        case screenEdgePan
+        case swipe(UISwipeGestureRecognizer.Direction)
+        case screenEdgePan(UIRectEdge)
         
-        case tapSetup(numberOfTapsRequired: Int = 1, numberOfTouchesRequired: Int = 1)
-        case panSetup(minimumNumberOfTouches: Int = 1, maximumNumberOfTouches: Int = .max)
-        case pinchSetup(scale: CGFloat = 1)
-        case longPressSetup(minimumPressDuration: TimeInterval = 0.5, allowableMovement: CGFloat = 10, numberOfTapsRequired: Int = 0, numberOfTouchesRequired: Int = 1)
-        case swipeSetup(UISwipeGestureRecognizer.Direction)
-        case screenEdgePanSetup(UIRectEdge)
+        /// case tapSetup(numberOfTapsRequired: Int = 1, numberOfTouchesRequired: Int = 1)
+        case tapSetup(numberOfTapsRequired: Int, numberOfTouchesRequired: Int)
+        /// case panSetup(minimumNumberOfTouches: Int = 1, maximumNumberOfTouches: Int = .max)
+        case panSetup(minimumNumberOfTouches: Int, maximumNumberOfTouches: Int)
+        /// case pinchSetup(scale: CGFloat = 1)
+        case pinchSetup(scale: CGFloat)
+        /// case longPressSetup(minimumPressDuration: TimeInterval = 0.5, allowableMovement: CGFloat = 10, numberOfTapsRequired: Int = 0, numberOfTouchesRequired: Int = 1)
+        case longPressSetup(minimumPressDuration: TimeInterval, allowableMovement: CGFloat, numberOfTapsRequired: Int, numberOfTouchesRequired: Int)
         
         case none
         
         var key: String {
-            String(describing: self)
+            return String(describing: self)
         }
         
         fileprivate init(gesture: UIGestureRecognizer) {
@@ -135,10 +137,10 @@ extension UIView {
                 self = .rotation
             case is UISwipeGestureRecognizer:
                 let swipe = gesture as! UISwipeGestureRecognizer
-                self = .swipeSetup(swipe.direction)
+                self = .swipe(swipe.direction)
             case is UIScreenEdgePanGestureRecognizer:
                 let screenEdgePan = gesture as! UIScreenEdgePanGestureRecognizer
-                self = .screenEdgePanSetup(screenEdgePan.edges)
+                self = .screenEdgePan(screenEdgePan.edges)
             default:
                 self = .none
             }
@@ -154,10 +156,6 @@ extension UIView {
                 return UIPinchGestureRecognizer()
             case .longPress:
                 return UILongPressGestureRecognizer()
-            case .swipe:
-                return UISwipeGestureRecognizer()
-            case .screenEdgePan:
-                return UIScreenEdgePanGestureRecognizer()
             case let .tapSetup(numberOfTapsRequired, numberOfTouchesRequired):
                 let tap = UITapGestureRecognizer()
                 tap.numberOfTapsRequired = numberOfTapsRequired
@@ -181,11 +179,11 @@ extension UIView {
                 return press
             case .rotation:
                 return UIRotationGestureRecognizer()
-            case let .swipeSetup(direction):
+            case let .swipe(direction):
                 let swipe = UISwipeGestureRecognizer()
                 swipe.direction = direction
                 return swipe
-            case let .screenEdgePanSetup(edges):
+            case let .screenEdgePan(edges):
                 let pan = UIScreenEdgePanGestureRecognizer()
                 pan.edges = edges
                 return pan
