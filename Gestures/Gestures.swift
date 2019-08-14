@@ -96,13 +96,21 @@ public extension UIView {
 // MARK: - Gesture
 extension UIView {
     public enum Gesture {
-        case tap(numberOfTapsRequired: Int = 1, numberOfTouchesRequired: Int = 1)
-        case pan(minimumNumberOfTouches: Int = 1, maximumNumberOfTouches: Int = .max)
-        case pinch(scale: CGFloat = 1)
-        case longPress(minimumPressDuration: TimeInterval = 0.5, allowableMovement: CGFloat = 10, numberOfTapsRequired: Int = 0, numberOfTouchesRequired: Int = 1)
+        case tap
+        case pan
+        case pinch
+        case longPress
         case rotation
-        case swipe(UISwipeGestureRecognizer.Direction)
-        case screenEdgePan(UIRectEdge)
+        case swipe
+        case screenEdgePan
+        
+        case tapSetup(numberOfTapsRequired: Int = 1, numberOfTouchesRequired: Int = 1)
+        case panSetup(minimumNumberOfTouches: Int = 1, maximumNumberOfTouches: Int = .max)
+        case pinchSetup(scale: CGFloat = 1)
+        case longPressSetup(minimumPressDuration: TimeInterval = 0.5, allowableMovement: CGFloat = 10, numberOfTapsRequired: Int = 0, numberOfTouchesRequired: Int = 1)
+        case swipeSetup(UISwipeGestureRecognizer.Direction)
+        case screenEdgePanSetup(UIRectEdge)
+        
         case none
         
         var key: String {
@@ -113,24 +121,24 @@ extension UIView {
             switch gesture {
             case is UITapGestureRecognizer:
                 let tap = gesture as! UITapGestureRecognizer
-                self = .tap(numberOfTapsRequired: tap.numberOfTapsRequired, numberOfTouchesRequired: tap.numberOfTouchesRequired)
+                self = .tapSetup(numberOfTapsRequired: tap.numberOfTapsRequired, numberOfTouchesRequired: tap.numberOfTouchesRequired)
             case is UIPanGestureRecognizer:
                 let pan = gesture as! UIPanGestureRecognizer
-                self = .pan(minimumNumberOfTouches: pan.minimumNumberOfTouches, maximumNumberOfTouches: pan.maximumNumberOfTouches)
+                self = .panSetup(minimumNumberOfTouches: pan.minimumNumberOfTouches, maximumNumberOfTouches: pan.maximumNumberOfTouches)
             case is UIPinchGestureRecognizer:
                 let pinch = gesture as! UIPinchGestureRecognizer
-                self = .pinch(scale: pinch.scale)
+                self = .pinchSetup(scale: pinch.scale)
             case is UILongPressGestureRecognizer:
                 let longPress = gesture as! UILongPressGestureRecognizer
-                self = .longPress(minimumPressDuration: longPress.minimumPressDuration, allowableMovement: longPress.allowableMovement, numberOfTapsRequired: longPress.numberOfTapsRequired, numberOfTouchesRequired: longPress.numberOfTouchesRequired)
+                self = .longPressSetup(minimumPressDuration: longPress.minimumPressDuration, allowableMovement: longPress.allowableMovement, numberOfTapsRequired: longPress.numberOfTapsRequired, numberOfTouchesRequired: longPress.numberOfTouchesRequired)
             case is UIRotationGestureRecognizer:
                 self = .rotation
             case is UISwipeGestureRecognizer:
                 let swipe = gesture as! UISwipeGestureRecognizer
-                self = .swipe(swipe.direction)
+                self = .swipeSetup(swipe.direction)
             case is UIScreenEdgePanGestureRecognizer:
                 let screenEdgePan = gesture as! UIScreenEdgePanGestureRecognizer
-                self = .screenEdgePan(screenEdgePan.edges)
+                self = .screenEdgePanSetup(screenEdgePan.edges)
             default:
                 self = .none
             }
@@ -138,21 +146,33 @@ extension UIView {
         
         fileprivate var gesture: UIGestureRecognizer? {
             switch self {
-            case let .tap(numberOfTapsRequired, numberOfTouchesRequired):
+            case .tap:
+                return UITapGestureRecognizer()
+            case .pan:
+                return UIPanGestureRecognizer()
+            case .pinch:
+                return UIPinchGestureRecognizer()
+            case .longPress:
+                return UILongPressGestureRecognizer()
+            case .swipe:
+                return UISwipeGestureRecognizer()
+            case .screenEdgePan:
+                return UIScreenEdgePanGestureRecognizer()
+            case let .tapSetup(numberOfTapsRequired, numberOfTouchesRequired):
                 let tap = UITapGestureRecognizer()
                 tap.numberOfTapsRequired = numberOfTapsRequired
                 tap.numberOfTouchesRequired = numberOfTouchesRequired
                 return UITapGestureRecognizer()
-            case let .pan(minimumNumberOfTouches, maximumNumberOfTouches):
+            case let .panSetup(minimumNumberOfTouches, maximumNumberOfTouches):
                 let pan = UIPanGestureRecognizer()
                 pan.minimumNumberOfTouches = minimumNumberOfTouches
                 pan.maximumNumberOfTouches = maximumNumberOfTouches
                 return pan
-            case let .pinch(scale):
+            case let .pinchSetup(scale):
                 let pinch = UIPinchGestureRecognizer()
                 pinch.scale = scale
                 return pinch
-            case let .longPress(minimumPressDuration, allowableMovement, numberOfTapsRequired, numberOfTouchesRequired):
+            case let .longPressSetup(minimumPressDuration, allowableMovement, numberOfTapsRequired, numberOfTouchesRequired):
                 let press = UILongPressGestureRecognizer()
                 press.minimumPressDuration = minimumPressDuration
                 press.allowableMovement = allowableMovement
@@ -161,11 +181,11 @@ extension UIView {
                 return press
             case .rotation:
                 return UIRotationGestureRecognizer()
-            case let .swipe(direction):
+            case let .swipeSetup(direction):
                 let swipe = UISwipeGestureRecognizer()
                 swipe.direction = direction
                 return swipe
-            case let .screenEdgePan(edges):
+            case let .screenEdgePanSetup(edges):
                 let pan = UIScreenEdgePanGestureRecognizer()
                 pan.edges = edges
                 return pan

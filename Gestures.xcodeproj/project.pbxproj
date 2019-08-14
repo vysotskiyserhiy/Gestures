@@ -16,7 +16,7 @@
 
 /* Begin PBXFileReference section */
 		2AABD9D622D0FF66002C5E37 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
-		2AABD9D722D0FF66002C5E37 /* Gestures.podspec */ = {isa = PBXFileReference; lastKnownFileType = file; path = Gestures.podspec; sourceTree = SOURCE_ROOT; };
+		2AABD9D722D0FF66002C5E37 /* Gestures.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = Gestures.podspec; sourceTree = SOURCE_ROOT; };
 		2AABD9D822D0FF66002C5E37 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = SOURCE_ROOT; };
 		2ABD69BC22C4AED4003FC977 /* Gestures.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Gestures.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2ABD69BF22C4AED4003FC977 /* Gestures.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Gestures.h; sourceTree = "<group>"; };
@@ -278,9 +278,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 5W3SMC6NDZ;
+				DEVELOPMENT_TEAM = Y2589WJ83E;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -304,9 +305,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 5W3SMC6NDZ;
+				DEVELOPMENT_TEAM = Y2589WJ83E;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
