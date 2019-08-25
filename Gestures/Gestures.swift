@@ -116,7 +116,23 @@ extension UIView {
         case none
         
         var key: String {
-            return String(describing: self)
+            switch self {
+            case .tap:
+                return Gesture.tapSetup(numberOfTapsRequired: 1,
+                                        numberOfTouchesRequired: 1).key
+            case .pan:
+                return Gesture.panSetup(minimumNumberOfTouches: 1,
+                                        maximumNumberOfTouches: .max).key
+            case .pinch:
+                return Gesture.pinchSetup(scale: 1).key
+            case .longPress:
+                return Gesture.longPressSetup(minimumPressDuration: 0.5,
+                                              allowableMovement: 10,
+                                              numberOfTapsRequired: 0,
+                                              numberOfTouchesRequired: 1).key
+            default:
+                return String(describing: self)
+            }
         }
         
         fileprivate init(gesture: UIGestureRecognizer) {
