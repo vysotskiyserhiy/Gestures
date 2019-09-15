@@ -34,6 +34,15 @@ extension UIView {
         UIView._removeHandlers.removeValue(forKey: hashString)?.values.forEach { $0() }
         UIView._handlers.removeValue(forKey: hashString)
     }
+    
+    public func remove(_ gesture: Gesture) {
+        if debug {
+            print("Removing \(gesture.key) on view \(hashString)")
+        }
+        
+        UIView._removeHandlers[hashString]?.removeValue(forKey: gesture.key)?()
+        UIView._handlers[hashString]?.removeValue(forKey: gesture.key)
+    }
 }
 
 
@@ -56,8 +65,16 @@ public extension UIView {
         addGestureRecognizer(recognizer)
         isUserInteractionEnabled = true
         
-        UIView._removeHandlers[hashString, default: [:]][gesture.key] = { [weak recognizer] in
-            recognizer?.removeTarget(target, action: action)
+        let targetObject = target as AnyObject
+        
+        UIView._removeHandlers[hashString, default: [:]][gesture.key] = { [weak recognizer, weak targetObject, weak self] in
+            if debug {
+                print("Removing handler on view \(self?.hashString ?? "nil"), for gesture \(gesture)")
+            }
+            
+            guard let recognizer = recognizer else { return }
+            recognizer.removeTarget(targetObject, action: action)
+            self?.removeGestureRecognizer(recognizer)
         }
         
         return recognizer
@@ -86,7 +103,9 @@ public extension UIView {
                 print("Removing handler on view \(self?.hashString ?? "nil"), for gesture \(gesture)")
             }
             
-            recognizer?.removeTarget(self, action: #selector(UIView._callHandler(_:)))
+            guard let recognizer = recognizer else { return }
+            recognizer.removeTarget(self, action: #selector(UIView._callHandler(_:)))
+            self?.removeGestureRecognizer(recognizer)
         }
         
         return recognizer
