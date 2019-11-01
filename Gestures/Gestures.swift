@@ -186,7 +186,9 @@ extension UIView {
             case .tap:
                 return UITapGestureRecognizer()
             case .pan:
-                return UIPanGestureRecognizer()
+                let pan = UIPanGestureRecognizer()
+                pan.maximumNumberOfTouches = .max
+                return pan
             case .pinch:
                 return UIPinchGestureRecognizer()
             case .longPress:
