@@ -12,6 +12,7 @@
 		2AABD9DB22D0FF66002C5E37 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 2AABD9D822D0FF66002C5E37 /* LICENSE */; };
 		2ABD69C122C4AED4003FC977 /* Gestures.h in Headers */ = {isa = PBXBuildFile; fileRef = 2ABD69BF22C4AED4003FC977 /* Gestures.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2ABD69C822C4AF22003FC977 /* Gestures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ABD69C722C4AF22003FC977 /* Gestures.swift */; };
+		89AF1FAE24A541F5003401B5 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AF1FAD24A541F5003401B5 /* Package.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +23,7 @@
 		2ABD69BF22C4AED4003FC977 /* Gestures.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Gestures.h; sourceTree = "<group>"; };
 		2ABD69C022C4AED4003FC977 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2ABD69C722C4AF22003FC977 /* Gestures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gestures.swift; sourceTree = "<group>"; };
+		89AF1FAD24A541F5003401B5 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -38,6 +40,7 @@
 		2ABD69B222C4AED4003FC977 = {
 			isa = PBXGroup;
 			children = (
+				89AF1FAD24A541F5003401B5 /* Package.swift */,
 				2ABD69BE22C4AED4003FC977 /* Gestures */,
 				2ABD69BD22C4AED4003FC977 /* Products */,
 			);
@@ -147,6 +150,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				89AF1FAE24A541F5003401B5 /* Package.swift in Sources */,
 				2ABD69C822C4AF22003FC977 /* Gestures.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
